@@ -39,9 +39,9 @@ def main():
     telegram_token = os.environ["TELEGRAM_BOT_KEY"]
     channel_id = os.environ["TELEGRAM_CHAT_ID"]
     nasa_token = os.environ["NASA_API_KEY"]
-    spacex_images_urls = fetch_spacex_id_launch(
-        launch_id="5eb87d47ffd86e000604b38a"
-    )
+    params = "5eb87d47ffd86e000604b38a"
+    spacex_url = f"https://api.spacexdata.com/v5/launches/{params}"
+    spacex_images_urls = fetch_spacex_id_launch(spacex_url)
     for url in spacex_images_urls:
         file_extensions = take_file_extension_from_url(url)
         download_image_in_folder(spacex_images_urls, path_for_download,
