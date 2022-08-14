@@ -5,6 +5,7 @@ import time
 
 import telegram
 from dotenv import load_dotenv
+from pathlib import Path
 
 
 def search_files_and_path_by_folder_name(folder_to_send):
@@ -13,19 +14,13 @@ def search_files_and_path_by_folder_name(folder_to_send):
         yield files, path
 
 
-def find_path_by_file_name(files_and_path, image_name):
-    for files, path in files_and_path:
-        for image in files:
-            if image == image_name:
-                return path
-
-
 def send_image(
         path_to_image, image_name, channel_id, telegram_token,
         delay_before_send
 ):
     bot = telegram.Bot(token=telegram_token)
     document = f"{path_to_image}/{image_name}"
+    print(document)
     with open(document, "rb") as image:
         bot.send_document(
             chat_id=channel_id,
@@ -34,16 +29,18 @@ def send_image(
         time.sleep(delay_before_send)
 
 
-def sed_one_image(file_name, channel_id, telegram_token):
-    folder_from_which_send = os.path.abspath(f"{os.getcwd()}")
+def send_one_image(file_name, channel_id, telegram_token):
+    folder_from_which_send = Path.cwd()
     files_and_path = search_files_and_path_by_folder_name(
         folder_from_which_send
     )
-    path = find_path_by_file_name(files_and_path, file_name)
-    send_image(
-        path, file_name, channel_id, telegram_token,
-        delay_before_send=0
-    )
+    for files, path in files_and_path:
+        for image in files:
+            if image == file_name:
+                send_image(
+                    path, file_name, channel_id, telegram_token,
+                    delay_before_send=0
+                )
 
 
 def send_images_from_folder(
@@ -58,9 +55,8 @@ def send_images_from_folder(
                     telegram_token,
                     delay_before_send
                 )
-                if files[-1]:
-                    random.shuffle(files)
-                    continue
+
+            random.shuffle(files)
 
 
 def main():
@@ -86,13 +82,13 @@ def main():
     load_dotenv()
     telegram_token = os.environ["TELEGRAM_BOT_KEY"]
     channel_id = os.environ["TELEGRAM_CHAT_ID"]
-    folder_from_which_send = os.path.abspath(f"{os.getcwd()}/{folder_name}")
+    folder_from_which_send = Path.cwd() / folder_name
     files_and_paths = search_files_and_path_by_folder_name(
         folder_from_which_send
     )
     try:
         if file_name:
-            sed_one_image(file_name, channel_id, telegram_token)
+            send_one_image(file_name, channel_id, telegram_token)
         else:
             send_images_from_folder(
                 folder_from_which_send, channel_id,

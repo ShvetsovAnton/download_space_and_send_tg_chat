@@ -2,6 +2,7 @@ import os
 import requests
 from urllib.parse import urlparse
 import urllib.parse
+from pathlib import Path
 
 
 def download_image_in_folder(
@@ -10,19 +11,18 @@ def download_image_in_folder(
     for image_number, image_url in enumerate(images_urls):
         response = requests.get(image_url)
         response.raise_for_status()
-        path = os.getcwd()
         filename = f"{image_name}{image_number}{file_extension}"
-        file_path = f"{path}/{filename}"
-        path_for_safe_image = f"{path_for_download}/{filename}"
+        file_path = Path.cwd() / filename
+        path_for_safe_image = Path.cwd() / path_for_download / filename
         with open(filename, "wb") as image:
             image.write(response.content)
         os.replace(file_path, path_for_safe_image)
 
 
 def make_folder(folder_name):
-    folder_path = os.getcwd()
+    folder_path = Path.cwd()
     os.makedirs(folder_name, exist_ok=True)
-    path_for_download = os.path.join(folder_path, folder_name)
+    path_for_download = Path.cwd() / folder_path / folder_name
     return path_for_download
 
 

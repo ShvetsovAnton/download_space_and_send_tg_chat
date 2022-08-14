@@ -20,14 +20,7 @@ def fetch_nasa_images(nasa_token):
 def main():
     load_dotenv()
     nasa_token = os.environ["NASA_API_KEY"]
-    args_parser = argparse.ArgumentParser(
-        description="Загружаем фото земли с 'NASA'"
-    )
-    args_parser.add_argument("token_nasa", type=str, help="Введи 'token'",
-                             default=nasa_token)
-    args = args_parser.parse_args()
-    nasa_token = args.token
-    image_name = "Nasa_apod"
+    image_name = "Nasa_apod_"
     try:
         nasa_images_urls = fetch_nasa_images(nasa_token)
     except requests.exceptions.HTTPError:
