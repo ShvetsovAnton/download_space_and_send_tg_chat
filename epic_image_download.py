@@ -1,7 +1,7 @@
 import os
 
 import requests
-from datetime import  datetime
+from datetime import datetime
 from dotenv import load_dotenv
 from down_load_tools import take_file_extension_from_url, \
     download_image_in_folder, make_folder
@@ -28,16 +28,13 @@ def main():
     load_dotenv()
     nasa_token = os.environ["NASA_API_KEY"]
     image_name = "Nasa_EPIC_"
-    try:
-        epic_images_urls = fetch_epic_image(nasa_token)
-        for url in epic_images_urls:
-            file_extension = take_file_extension_from_url(url)
-            path_for_download = make_folder(folder_name="Nasa_EPIC")
-            download_image_in_folder(
-                epic_images_urls, path_for_download, file_extension, image_name
-            )
-    except requests.exceptions.HTTPError:
-        print("Неверный токен или сайт недоступен")
+    epic_images_urls = fetch_epic_image(nasa_token)
+    for url in epic_images_urls:
+        file_extension = take_file_extension_from_url(url)
+        path_for_download = make_folder(folder_name="image")
+        download_image_in_folder(
+            epic_images_urls, path_for_download, file_extension, image_name
+        )
 
 
 if __name__ == '__main__':

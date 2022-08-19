@@ -20,7 +20,6 @@ def send_image(
 ):
     bot = telegram.Bot(token=telegram_token)
     document = f"{path_to_image}/{image_name}"
-    print(document)
     with open(document, "rb") as image:
         bot.send_document(
             chat_id=channel_id,
@@ -66,6 +65,7 @@ def main():
     args_parser.add_argument(
         "--folder_name", type=str,
         help="Введи имя папки из которой будем отправлять фото",
+        default="image"
     )
     args_parser.add_argument(
         "--delay_before_send", type=int,
@@ -86,16 +86,18 @@ def main():
     files_and_paths = search_files_and_path_by_folder_name(
         folder_from_which_send
     )
-    try:
-        if file_name:
-            send_one_image(file_name, channel_id, telegram_token)
-        else:
-            send_images_from_folder(
-                folder_from_which_send, channel_id,
-                telegram_token, delay_before_send, files_and_paths
-            )
-    except telegram.error.NetworkError:
-        print("Не могу отправить файл, Телеграм не отвечает")
+    while True:
+        try:
+            if file_name:
+                send_one_image(file_name, channel_id, telegram_token)
+            else:
+                send_images_from_folder(
+                    folder_from_which_send, channel_id,
+                    telegram_token, delay_before_send, files_and_paths
+                    )
+        except telegram.error.TelegramError:
+            print("Не могу отправить файл, Телеграм не отвечает")
+        continue
 
 
 if __name__ == '__main__':
