@@ -94,10 +94,9 @@ def main():
                 send_images_from_folder(
                     folder_from_which_send, channel_id,
                     telegram_token, delay_before_send, files_and_paths
-                    )
+                )
         except telegram.error.TelegramError:
             print("Не могу отправить файл, Телеграм не отвечает")
-        continue
 
 
 if __name__ == '__main__':
