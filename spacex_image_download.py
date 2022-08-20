@@ -23,23 +23,16 @@ def main():
     )
     args = args_parser.parse_args()
     launch_id = args.launch_id
-    try:
-        spacex_images_urls = fetch_spacex_id_launch(launch_id)
-    except requests.exceptions.HTTPError:
-        print(
-            "ID введён неверно, "
-            "можете попробовать этот ID - 5eb87d47ffd86e000604b38a"
+    spacex_images_urls = fetch_spacex_id_launch(launch_id)
+    for url in spacex_images_urls:
+        file_extension = take_file_extension_from_url(url)
+        path_for_download = make_folder(folder_name="image")
+        download_image_in_folder(
+            spacex_images_urls, path_for_download, file_extension,
+            image_name
         )
-    else:
-        for url in spacex_images_urls:
-            file_extension = take_file_extension_from_url(url)
-            path_for_download = make_folder(folder_name="image")
-            download_image_in_folder(
-                spacex_images_urls, path_for_download, file_extension,
-                image_name
-            )
-        if not spacex_images_urls:
-            print("На последнем запуске не делали фото.")
+    if not spacex_images_urls:
+        print("На последнем запуске не делали фото.")
 
 
 if __name__ == '__main__':
