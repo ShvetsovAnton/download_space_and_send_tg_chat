@@ -8,12 +8,6 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 
-def search_files_and_path_by_folder_name(folder_to_send):
-    files_path = os.walk(folder_to_send)
-    for path, folder, files in files_path:
-        yield files, path
-
-
 def send_image(
         path_to_image, image_name, channel_id, telegram_token,
         delay_before_send
@@ -28,34 +22,30 @@ def send_image(
         time.sleep(delay_before_send)
 
 
-def send_one_image(file_name, channel_id, telegram_token):
-    folder_from_which_send = Path.cwd()
-    files_and_path = search_files_and_path_by_folder_name(
+def send_one_image(
+        image_name, channel_id, telegram_token, files_names,
         folder_from_which_send
-    )
-    for files, path in files_and_path:
-        for image in files:
-            if image == file_name:
-                send_image(
-                    path, file_name, channel_id, telegram_token,
-                    delay_before_send=0
-                )
+):
+    for file_name in files_names:
+        if file_name == image_name:
+            send_image(
+                folder_from_which_send, file_name, channel_id,
+                telegram_token, delay_before_send=0
+            )
 
 
 def send_images_from_folder(
         folder_from_which_send, channel_id, telegram_token,
-        delay_before_send, files_and_paths
+        delay_before_send, files_names
 ):
-    for files, paths in files_and_paths:
-        while True:
-            for file in files:
-                send_image(
-                    folder_from_which_send, file, channel_id,
-                    telegram_token,
-                    delay_before_send
-                )
-
-            random.shuffle(files)
+    while True:
+        for file_name in files_names:
+            send_image(
+                folder_from_which_send, file_name, channel_id,
+                telegram_token,
+                delay_before_send
+            )
+        random.shuffle(files_names)
 
 
 def main():
@@ -72,31 +62,36 @@ def main():
         help="Введи задержку перед отправкой", default=14400
     )
     args_parser.add_argument(
-        "--file_name", type=str,
+        "--image_name", type=str,
         help="Введи название файла с указанием расширения"
     )
     args = args_parser.parse_args()
     delay_before_send = args.delay_before_send
     folder_name = args.folder_name
-    file_name = args.file_name
+    image_name = args.image_name
     load_dotenv()
     telegram_token = os.environ["TELEGRAM_BOT_KEY"]
     channel_id = os.environ["TELEGRAM_CHAT_ID"]
     folder_from_which_send = Path.cwd() / folder_name
-    files_and_paths = search_files_and_path_by_folder_name(
-        folder_from_which_send
-    )
+    files_names = os.listdir(folder_name)
+    delay_before_trying_to_connect = 10
     while True:
         try:
-            if file_name:
-                send_one_image(file_name, channel_id, telegram_token)
+            if image_name:
+                send_one_image(
+                    image_name, channel_id, telegram_token, files_names,
+                    folder_from_which_send
+                )
+                break
             else:
                 send_images_from_folder(
                     folder_from_which_send, channel_id,
-                    telegram_token, delay_before_send, files_and_paths
+                    telegram_token, delay_before_send, files_names
                 )
-        except telegram.error.TelegramError:
+        except telegram.error.NetworkError:
             print("Не могу отправить файл, Телеграм не отвечает")
+            time.sleep(delay_before_trying_to_connect)
+        delay_before_trying_to_connect = 100
 
 
 if __name__ == '__main__':

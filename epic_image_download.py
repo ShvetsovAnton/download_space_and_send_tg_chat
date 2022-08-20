@@ -13,9 +13,9 @@ def fetch_epic_image(nasa_token):
     response = requests.get(url, params=payload)
     response.raise_for_status()
     response_json = response.json()
-    for date_image in response_json:
-        date = datetime.fromisoformat(date_image["date"])
-        image_name = date_image["image"]
+    for description_photo in response_json:
+        date = datetime.fromisoformat(description_photo["date"])
+        image_name = description_photo["image"]
         epic_image_url = (
             f"https://api.nasa.gov/EPIC/archive/natural/"
             f"{date:%Y/%m/%d}/png/{image_name}.png"

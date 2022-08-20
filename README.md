@@ -109,7 +109,7 @@ python nasa_image_download.py
 
 Пример запуска:
 ```python
-python send_file_in_telegram.py --file_name "Nasa_apod_0.jpg"
+python send_file_in_telegram.py --image_name "Nasa_apod_0.jpg"
 ```
 
 2. Отправка всех изображений из указанной папки, папка должна находиться в директории проекта. Отправка происходит с заданной задержкой.
