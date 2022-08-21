@@ -13,25 +13,14 @@ def send_image(
         delay_before_send
 ):
     bot = telegram.Bot(token=telegram_token)
-    document = f"{path_to_image}/{image_name}"
+    document = Path(path_to_image / image_name)
+    print(document)
     with open(document, "rb") as image:
         bot.send_document(
             chat_id=channel_id,
             document=image
         )
         time.sleep(delay_before_send)
-
-
-def send_one_image(
-        image_name, channel_id, telegram_token, files_names,
-        folder_from_which_send
-):
-    for file_name in files_names:
-        if file_name == image_name:
-            send_image(
-                folder_from_which_send, file_name, channel_id,
-                telegram_token, delay_before_send=0
-            )
 
 
 def send_images_from_folder(
@@ -77,10 +66,10 @@ def main():
     delay_before_trying_to_connect = 10
     while True:
         try:
-            if image_name:
-                send_one_image(
-                    image_name, channel_id, telegram_token, files_names,
-                    folder_from_which_send
+            if image_name in files_names:
+                send_image(
+                    folder_from_which_send, image_name, channel_id,
+                    telegram_token, delay_before_send
                 )
                 break
             else:

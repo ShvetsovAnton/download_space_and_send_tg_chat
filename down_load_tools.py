@@ -20,10 +20,8 @@ def download_image_in_folder(
 
 
 def make_folder(folder_name):
-    folder_path = Path.cwd()
     os.makedirs(folder_name, exist_ok=True)
-    path_for_download = Path.cwd() / folder_path / folder_name
-    return path_for_download
+    return Path.cwd() / folder_name
 
 
 def take_file_extension_from_url(url):
