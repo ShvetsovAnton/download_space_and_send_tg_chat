@@ -1,16 +1,16 @@
 # Скачиваем изображение космоса и отправляем их в телеграм
 
-[![imageup.ru](https://imageup.ru/img286/4004044/fioletovye-i-serye-tumannosti-tsifrovye-oboi-kosmos-zvezdy-oboi-2560x800_59-1.jpg)](https://imageup.ru/img286/4004044/fioletovye-i-serye-tumannosti-tsifrovye-oboi-kosmos-zvezdy-oboi-2560x800_59-1.jpg.html)
+
 ## О проекте: 
 
 Содержит четыре скрипта
 1. `epic_image_download.py` качает изображение через API - https://api.nasa.gov/ 
-[![imageup.ru](https://imageup.ru/img66/3990243/chrome_vk1pf4jils.png)](https://imageup.ru/img66/3990243/chrome_vk1pf4jils.png.html)
+
     * качает фотографии с архива Nasa, которые были сделаны телескопом "EPIC";
     * создаёт в директории проекта паку `image`.
 
 2. `nasa_image_download.py`  качает изображение через API - https://api.nasa.gov/
-[![imageup.ru](https://imageup.ru/img169/3990246/chrome_bctr4faxhc.png)](https://imageup.ru/img169/3990246/chrome_bctr4faxhc.png.html)
+
    * качает случайные фотографии с архива Nasa;
    * создаёт в директории проекта паку `image`.
     
@@ -35,12 +35,12 @@
 #### Как получить API ключи и создать канал в телеграм:
 
 `TELEGRAM_BOT_KEY` можно получить при создании бота в телеграм, как это сделать - https://botcreators.ru/blog/botfather-instrukciya/
-[![imageup.ru](https://imageup.ru/img120/3990253/telegram_trpah8babz.jpg)](https://imageup.ru/img120/3990253/telegram_trpah8babz.jpg.html)
+
 
 `TELEGRAM_CHAT_ID` как создать канал - https://www.easydoit.ru/telegram/kak-dobavit-bota-v-kanal-telegram/
 
 `NASA_API_KEY` что бы получить API nasa надо перейти на сайт - https://api.nasa.gov/ и заполнить форму "Generate API Key"
-[![imageup.ru](https://imageup.ru/img154/3993663/chrome_327t9ltrsk.png)](https://imageup.ru/img154/3993663/chrome_327t9ltrsk.png.html)
+
 
 
 __Важное!__ Телеграм бот должен быть админом в вашем канале.
